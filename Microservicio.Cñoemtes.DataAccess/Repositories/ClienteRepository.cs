@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Microsoft.EntityFrameworkCore;
 using Microservicio.Clientes.DataAccess.Context;
 using Microservicio.Clientes.DataAccess.Entities;
 using Microservicio.Clientes.DataAccess.Repositories.Interfaces;
-
 namespace Microservicio.Clientes.DataAccess.Repositories
 {
     public class ClienteRepository : IClienteRepository
@@ -34,8 +32,7 @@ namespace Microservicio.Clientes.DataAccess.Repositories
 
         public async Task<IEnumerable<ClienteEntity>> GetAllAsync()
         {
-            return await _context.Clientes
-                .ToListAsync();
+            return await _context.Clientes.ToListAsync();
         }
 
         public async Task<(IEnumerable<ClienteEntity> data, int total)> GetPagedAsync(int page, int pageSize)
@@ -45,11 +42,20 @@ namespace Microservicio.Clientes.DataAccess.Repositories
             var total = await query.CountAsync();
 
             var data = await query
+                .OrderBy(c => c.Nombre)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             return (data, total);
+        }
+
+        // 🔥 MÉTODO PRO (CONCURRENCIA)
+        public async Task<ClienteEntity> ObtenerParaActualizarAsync(int id)
+        {
+            return await _context.Clientes
+                .AsTracking() // 🔥 importante
+                .FirstOrDefaultAsync(c => c.IdCliente == id);
         }
 
         // ✏️ OPERACIONES
@@ -66,12 +72,12 @@ namespace Microservicio.Clientes.DataAccess.Repositories
 
         public void Delete(ClienteEntity cliente)
         {
-            // 🔥 BORRADO LÓGICO
             cliente.Eliminado = true;
             _context.Clientes.Update(cliente);
         }
 
-        // 💾 GUARDAR CAMBIOS
+        // 💾 SAVE
+
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

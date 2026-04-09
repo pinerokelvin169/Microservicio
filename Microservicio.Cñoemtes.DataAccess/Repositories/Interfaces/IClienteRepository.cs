@@ -16,8 +16,11 @@ namespace Microservicio.Clientes.DataAccess.Repositories.Interfaces
 
         Task<IEnumerable<ClienteEntity>> GetAllAsync();
 
-        // 📄 PAGINACIÓN (PRO 🔥)
+        // 📄 PAGINACIÓN
         Task<(IEnumerable<ClienteEntity> data, int total)> GetPagedAsync(int page, int pageSize);
+
+        // 🔥 PARA ACTUALIZACIÓN (CONCURRENCIA)
+        Task<ClienteEntity> ObtenerParaActualizarAsync(int id);
 
         // ✏️ OPERACIONES
 
@@ -25,7 +28,7 @@ namespace Microservicio.Clientes.DataAccess.Repositories.Interfaces
 
         void Update(ClienteEntity cliente);
 
-        void Delete(ClienteEntity cliente); // borrado lógico
+        void Delete(ClienteEntity cliente);
 
         // 💾 GUARDAR CAMBIOS
         Task SaveChangesAsync();
