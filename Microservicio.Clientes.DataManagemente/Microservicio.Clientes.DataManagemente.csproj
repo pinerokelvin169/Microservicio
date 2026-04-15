@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microservicio.Cñoemtes.DataAccess\Microservicio.Clientes.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

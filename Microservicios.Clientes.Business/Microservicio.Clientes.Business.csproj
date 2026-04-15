@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microservicio.Clientes.DataManagemente\Microservicio.Clientes.DataManagemente.csproj" />
+  </ItemGroup>
+
 </Project>
